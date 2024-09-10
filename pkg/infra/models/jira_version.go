@@ -96,3 +96,9 @@ type VersionDetailScheme struct {
 	Released    bool   `json:"released,omitempty"`    // Indicates if the detail is released.
 	ReleaseDate string `json:"releaseDate,omitempty"` // The release date of the detail.
 }
+
+type RelatedWorkScheme struct {
+	Category string `json:"category"`
+	Title    string `json:"title"`
+	URL      string `json:"url"`
+}

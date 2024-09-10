@@ -2,11 +2,11 @@ package confluence
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
 type VersionConnector interface {
-
 	// Gets returns the versions for a piece of content in descending order.
 	//
 	// GET /wiki/rest/api/content/{id}/version

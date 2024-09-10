@@ -7,7 +7,6 @@ import (
 )
 
 type ProjectConnector interface {
-
 	// Create creates a project based on a project type template
 	//
 	// POST /rest/api/{2-3}/project
@@ -94,7 +93,6 @@ type ProjectConnector interface {
 }
 
 type ProjectCategoryConnector interface {
-
 	// Gets returns all project categories.
 	//
 	// GET /rest/api/{2-3}/projectCategory
@@ -132,7 +130,6 @@ type ProjectCategoryConnector interface {
 }
 
 type ProjectComponentConnector interface {
-
 	// Create creates a component. Use components to provide containers for issues within a project.
 	//
 	// POST /rest/api/{2-3}/component
@@ -179,7 +176,6 @@ type ProjectComponentConnector interface {
 }
 
 type ProjectFeatureConnector interface {
-
 	// Gets returns the list of features for a project.
 	//
 	// GET /rest/api/{2-3}/project/{projectKeyOrID}/features
@@ -196,7 +192,6 @@ type ProjectFeatureConnector interface {
 }
 
 type ProjectPermissionSchemeConnector interface {
-
 	// Get search the permission scheme associated with the project.
 	//
 	// GET /rest/api/{2-3}/project/{projectKeyOrID}/permissionscheme
@@ -220,7 +215,6 @@ type ProjectPermissionSchemeConnector interface {
 }
 
 type ProjectPropertyConnector interface {
-
 	// Gets returns all project property keys for the project.
 	//
 	// GET /rest/api/{2-3}/project/{projectKeyOrID}/properties
@@ -257,7 +251,6 @@ type ProjectPropertyConnector interface {
 }
 
 type ProjectRoleConnector interface {
-
 	// Gets returns a list of project roles for the project returning the name and self URL for each role.
 	//
 	// GET /rest/api/{2-3}/project/{projectKeyOrID}/role
@@ -295,7 +288,6 @@ type ProjectRoleConnector interface {
 }
 
 type ProjectRoleActorConnector interface {
-
 	// Add adds actors to a project role for the project.
 	//
 	// POST /rest/api/{2-3}/project/{projectKeyOrID}/role/{id}
@@ -312,7 +304,6 @@ type ProjectRoleActorConnector interface {
 }
 
 type ProjectTypeConnector interface {
-
 	// Gets returns all project types, whether the instance has a valid license for each type.
 	//
 	// GET /rest/api/{2-3}/project/type
@@ -343,7 +334,6 @@ type ProjectTypeConnector interface {
 }
 
 type ProjectValidatorConnector interface {
-
 	// Validate validates a project key by confirming the key is a valid string and not in use.
 	//
 	// GET /rest/api/{2-3}/projectvalidate/key
@@ -375,7 +365,6 @@ type ProjectValidatorConnector interface {
 }
 
 type ProjectVersionConnector interface {
-
 	// Gets returns all versions in a project.
 	//
 	// The response is not paginated.
@@ -443,4 +432,6 @@ type ProjectVersionConnector interface {
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-versions-unresolved-issues-count
 	UnresolvedIssueCount(ctx context.Context, versionID string) (*model.VersionUnresolvedIssuesCountScheme, *model.ResponseScheme, error)
+
+	CreateRelatedWork(ctx context.Context, versionID string, payload *model.RelatedWorkScheme) (*model.RelatedWorkScheme, *model.ResponseScheme, error)
 }

@@ -15,7 +15,6 @@ import (
 
 // NewProjectVersionService creates a new instance of ProjectVersionService.
 func NewProjectVersionService(client service.Connector, version string) (*ProjectVersionService, error) {
-
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
 	}
@@ -106,6 +105,10 @@ func (p *ProjectVersionService) RelatedIssueCounts(ctx context.Context, versionI
 	return p.internalClient.RelatedIssueCounts(ctx, versionID)
 }
 
+func (p *ProjectVersionService) CreateRelatedWork(ctx context.Context, versionID string, payload *model.RelatedWorkScheme) (*model.RelatedWorkScheme, *model.ResponseScheme, error) {
+	return p.internalClient.CreateRelatedWork(ctx, versionID, payload)
+}
+
 // UnresolvedIssueCount returns counts of the issues and unresolved issues for the project version.
 //
 // GET /rest/api/{2-3}/version/{id}/unresolvedIssueCount
@@ -121,7 +124,6 @@ type internalProjectVersionImpl struct {
 }
 
 func (i *internalProjectVersionImpl) Gets(ctx context.Context, projectKeyOrID string) ([]*model.VersionScheme, *model.ResponseScheme, error) {
-
 	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKeyError
 	}
@@ -143,7 +145,6 @@ func (i *internalProjectVersionImpl) Gets(ctx context.Context, projectKeyOrID st
 }
 
 func (i *internalProjectVersionImpl) Search(ctx context.Context, projectKeyOrID string, options *model.VersionGetsOptions, startAt, maxResults int) (*model.VersionPageScheme, *model.ResponseScheme, error) {
-
 	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKeyError
 	}
@@ -188,7 +189,6 @@ func (i *internalProjectVersionImpl) Search(ctx context.Context, projectKeyOrID 
 }
 
 func (i *internalProjectVersionImpl) Create(ctx context.Context, payload *model.VersionPayloadScheme) (*model.VersionScheme, *model.ResponseScheme, error) {
-
 	endpoint := fmt.Sprintf("rest/api/%v/version", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
@@ -206,7 +206,6 @@ func (i *internalProjectVersionImpl) Create(ctx context.Context, payload *model.
 }
 
 func (i *internalProjectVersionImpl) Get(ctx context.Context, versionID string, expand []string) (*model.VersionScheme, *model.ResponseScheme, error) {
-
 	if versionID == "" {
 		return nil, nil, model.ErrNoVersionIDError
 	}
@@ -237,7 +236,6 @@ func (i *internalProjectVersionImpl) Get(ctx context.Context, versionID string, 
 }
 
 func (i *internalProjectVersionImpl) Update(ctx context.Context, versionID string, payload *model.VersionPayloadScheme) (*model.VersionScheme, *model.ResponseScheme, error) {
-
 	if versionID == "" {
 		return nil, nil, model.ErrNoVersionIDError
 	}
@@ -259,7 +257,6 @@ func (i *internalProjectVersionImpl) Update(ctx context.Context, versionID strin
 }
 
 func (i *internalProjectVersionImpl) Merge(ctx context.Context, versionID, versionMoveIssuesTo string) (*model.ResponseScheme, error) {
-
 	if versionID == "" {
 		return nil, model.ErrNoVersionIDError
 	}
@@ -279,7 +276,6 @@ func (i *internalProjectVersionImpl) Merge(ctx context.Context, versionID, versi
 }
 
 func (i *internalProjectVersionImpl) RelatedIssueCounts(ctx context.Context, versionID string) (*model.VersionIssueCountsScheme, *model.ResponseScheme, error) {
-
 	if versionID == "" {
 		return nil, nil, model.ErrNoVersionIDError
 	}
@@ -301,7 +297,6 @@ func (i *internalProjectVersionImpl) RelatedIssueCounts(ctx context.Context, ver
 }
 
 func (i *internalProjectVersionImpl) UnresolvedIssueCount(ctx context.Context, versionID string) (*model.VersionUnresolvedIssuesCountScheme, *model.ResponseScheme, error) {
-
 	if versionID == "" {
 		return nil, nil, model.ErrNoVersionIDError
 	}
@@ -320,4 +315,21 @@ func (i *internalProjectVersionImpl) UnresolvedIssueCount(ctx context.Context, v
 	}
 
 	return issues, response, nil
+}
+
+func (i *internalProjectVersionImpl) CreateRelatedWork(ctx context.Context, versionID string, payload *model.RelatedWorkScheme) (*model.RelatedWorkScheme, *model.ResponseScheme, error) {
+	endpoint := fmt.Sprintf("rest/api/%v/version/%s/relatedwork", i.version, versionID)
+
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	version := new(model.RelatedWorkScheme)
+	response, err := i.c.Call(request, version)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return version, response, nil
 }
